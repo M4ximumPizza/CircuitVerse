@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+}
+
+group = 'mi.m4x.project.circuitverse'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // LWJGL dependencies
+    implementation 'org.lwjgl:lwjgl:3.3.2'
+    implementation 'org.lwjgl:lwjgl-opengl:3.3.2' // LWJGL OpenGL
+    implementation 'org.lwjgl:lwjgl-stb:3.3.2' // LWJGL STB
+    implementation 'org.lwjgl:lwjgl-tinyfd:3.3.2' // LWJGL TinyFileDialogs
+    implementation 'org.lwjgl:lwjgl-jemalloc:3.3.2' // LWJGL Jemalloc
+    implementation 'org.lwjgl:lwjgl-glfw:3.3.2' // GLFW
+
+    // JUnit dependencies (already present)
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
