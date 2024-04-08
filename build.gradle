@@ -1,6 +1,8 @@
 plugins {
-<<<<<<< HEAD
-    id 'java'
+    id("java")
+    id("application")
+    id("java-library")
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = 'mi.m4x.project.circuitverse'
@@ -27,12 +29,7 @@ dependencies {
 test {
     useJUnitPlatform()
 }
-=======
-    id("java")
-    id("application")
-    id("java-library")
-    id("com.github.johnrengelman.shadow") version "8.1.1"
-}
+
 
 repositories {
     mavenCentral()
@@ -96,5 +93,3 @@ static def void setCurWorkingDir(Task curTask) {
         runningDir.mkdirs()
     curTask.workingDir = runningDir
 }
-
->>>>>>> master
