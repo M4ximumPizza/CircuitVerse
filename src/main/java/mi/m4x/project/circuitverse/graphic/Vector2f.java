@@ -1,4 +1,4 @@
-package mi.m4x.project.circuitverse.engine.math;
+package mi.m4x.project.circuitverse.graphic;
 
 /**
  * This class represents a 2-dimensional vector and provides methods for vector operations.
