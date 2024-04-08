@@ -1,4 +1,8 @@
-package mi.m4x.project.circuitverse.core;;
+package mi.m4x.project.circuitverse.core;
+
+import mi.m4x.project.circuitverse.graphic.Vector3f;
+
+;
 
 /**
  * This class is responsible for creating and manipulating 4x4 matrices.
