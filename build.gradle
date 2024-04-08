@@ -1,0 +1,71 @@
+plugins {
+    id("java")
+    id("application")
+    id("java-library")
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+}
+
+repositories {
+    mavenCentral()
+
+    maven {
+        name "Jitpack"
+        url "https://jitpack.io"
+    }
+}
+
+configurations {
+    shadowMe
+    api.extendsFrom(shadowMe)
+
+    internal { // Allows to include something without it being in the maven
+        visible = false
+        canBeConsumed = false
+        canBeResolved = false
+    }
+    compileClasspath.extendsFrom(internal)
+    runtimeClasspath.extendsFrom(internal)
+    testCompileClasspath.extendsFrom(internal)
+    testRuntimeClasspath.extendsFrom(internal)
+}
+
+dependencies {
+    implementation("org.tinylog:tinylog:$tiny_logger_version")
+    implementation("com.github.tobiasrm:tinylog-coloredconsole:$tiny_logger_version")
+
+    implementation("com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdx_version")
+
+    implementation("com.badlogicgames.gdx:gdx-platform:$gdx_version")
+    implementation("com.badlogicgames.gdx:gdx-platform:$gdx_version:natives-desktop")
+
+    implementation("games.rednblack.miniaudio:miniaudio:$mini_audio_version")
+    implementation("games.rednblack.miniaudio:miniaudio:$mini_audio_version:natives-desktop")
+
+}
+
+// Tasks
+
+tasks.shadowJar {
+    mainClassName = "mi.m4x.project.circuitverse.main.Main"
+}
+
+tasks.runShadow {
+    setCurWorkingDir(tasks.runShadow)
+}
+
+tasks.register("Run Circuit Verse", JavaExec) {
+    group "circuit_verse"
+
+    dependsOn "runShadow"
+}
+
+// Functions
+
+static def void setCurWorkingDir(Task curTask) {
+    // Change the run directory
+    File runningDir = new File("run/")
+    if (!runningDir.exists())
+        runningDir.mkdirs()
+    curTask.workingDir = runningDir
+}
+
