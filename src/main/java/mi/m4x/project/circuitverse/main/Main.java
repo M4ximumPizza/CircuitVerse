@@ -49,6 +49,7 @@ public class Main {
 
             @Override
             public boolean closeRequested() {
+                Gdx.app.exit();
                 return false;
             }
 
