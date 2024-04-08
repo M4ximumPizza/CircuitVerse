@@ -1,4 +1,4 @@
-package mi.m4x.project.circuitverse.core;
+package mi.m4x.project.circuitverse.graphic;
 
 import mi.m4x.project.circuitverse.graphic.Vector3f;
 
