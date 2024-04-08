@@ -21,12 +21,19 @@ public class CircuitVerse extends ApplicationAdapter {
         System.exit(0);
     }
 
+    public static void onInit() {
+
+    }
+
     @Override
     public void create() {
         app = (Lwjgl3Application) Gdx.app;
 
         miniAudio = new MiniAudio();
         Gdx.graphics.setForegroundFPS(60);
+        Gdx.input.setCursorCatched(true);
+
+        onInit();
     }
 
     @Override
