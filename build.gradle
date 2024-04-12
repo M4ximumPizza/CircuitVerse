@@ -70,8 +70,7 @@ configurations {
 }
 
 tasks.shadowJar {
-//    mainClassName = "mi.m4x.project.circuitverse.main.Main"
-    mainClassName = "net.fabricmc.loader.launch.knot.KnotClient"
+    mainClassName = "mi.m4x.project.circuitverse.main.Main"
 }
 
 tasks.runShadow {

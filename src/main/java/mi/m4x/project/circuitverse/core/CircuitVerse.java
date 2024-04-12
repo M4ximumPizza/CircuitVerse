@@ -50,10 +50,6 @@ public class CircuitVerse extends ApplicationAdapter {
         System.exit(0);
     }
 
-    public static void onInit() {
-
-    }
-
     @Override
     public void create() {
         camera = new Camera();
@@ -65,7 +61,6 @@ public class CircuitVerse extends ApplicationAdapter {
         Gdx.input.setCursorCatched(true);
 
         modelBatch = new ModelBatch();
-        onInit();
     }
 
     @Override
@@ -73,9 +68,26 @@ public class CircuitVerse extends ApplicationAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-        camera.update();
+        this.doTicks();
 
         chunk.render(camera);
+    }
+
+    public float fixedUpdateAccumulator = 0f;
+    public double secondsSinceLastUpdate = 0f;
+    public double lastUpdateTime = 0f;
+
+    private void doTicks() {
+        this.fixedUpdateAccumulator += Gdx.graphics.getDeltaTime();
+        float fixedUpdateTimestep = 0.05F;
+
+        double curUpdateTime;
+        for(curUpdateTime = (double)System.currentTimeMillis(); this.fixedUpdateAccumulator >= fixedUpdateTimestep; this.lastUpdateTime = curUpdateTime) {
+            this.camera.update();
+            this.fixedUpdateAccumulator -= fixedUpdateTimestep;
+        }
+
+        this.secondsSinceLastUpdate = this.lastUpdateTime == -1.0 ? 0.0 : (curUpdateTime - this.lastUpdateTime) / 1000.0;
     }
 
     @Override
