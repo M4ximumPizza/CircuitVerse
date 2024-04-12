@@ -19,53 +19,56 @@
 
 package mi.m4x.project.circuitverse.game;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Chunk {
-    private static final int SIZE = 16;
-    private Cube[][][] cubes = new Cube[SIZE][SIZE][1];
-    private Vector3 cubeSize;
+    private Model cubeModel;
+    private List<ModelInstance> cubeInstances;
+    private ModelBatch modelBatch;
 
     public Chunk() {
-        Texture texture = new Texture("textures/icon.png");
-        TextureRegion textureRegion = new TextureRegion(texture);
-        cubeSize = new Vector3(1, 1, 1);
-        for (int x = 0; x < SIZE; x++) {
-            for (int y = 0; y < SIZE; y++) {
-                for (int z = 0; z < 1; z++) {
-                    Vector3 position = new Vector3(x, y, z);
-                    cubes[x][y][z] = new Cube(textureRegion, position);
-                }
+        modelBatch = new ModelBatch();
+        cubeInstances = new ArrayList<>();
+
+        ModelBuilder modelBuilder = new ModelBuilder();
+        cubeModel = modelBuilder.createBox(1f, 1f, 1f,
+                new Material(ColorAttribute.createDiffuse(Color.GREEN)),
+                VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
+
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                ModelInstance cubeInstance = new ModelInstance(cubeModel);
+                cubeInstance.transform.translate(x, 0, z);
+                cubeInstances.add(cubeInstance);
             }
         }
     }
 
-    public void render() {
-        for (int x = 0; x < SIZE; x++) {
-            for (int y = 0; y < SIZE; y++) {
-                for (int z = 0; z < 1; z++) {
-                    cubes[x][y][z].render(cubeSize);
-                }
-            }
+    public void render(Camera camera) {
+        Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+
+        modelBatch.begin(camera.getCamera());
+        for (ModelInstance cubeInstance : cubeInstances) {
+            modelBatch.render(cubeInstance);
         }
+        modelBatch.end();
     }
 
     public void dispose() {
-        for (int x = 0; x < SIZE; x++) {
-            for (int y = 0; y < SIZE; y++) {
-                for (int z = 0; z < 1; z++) {
-                    if (cubes[x][y][z] != null) {
-                        cubes[x][y][z].dispose();
-                    }
-                }
-            }
-        }
-    }
-
-    public void resize(int width, int height) {
-        cubeSize.x = width / (float)SIZE;
-        cubeSize.y = height / (float)SIZE;
+        modelBatch.dispose();
+        cubeModel.dispose();
     }
 }

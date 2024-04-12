@@ -22,7 +22,9 @@ package mi.m4x.project.circuitverse.core;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import games.rednblack.miniaudio.MiniAudio;
+import mi.m4x.project.circuitverse.game.Camera;
 import mi.m4x.project.circuitverse.game.Chunk;
 import org.lwjgl.opengl.GL20;
 import org.pmw.tinylog.Logger;
@@ -34,12 +36,14 @@ public class CircuitVerse extends ApplicationAdapter {
     private Chunk chunk;
     public static Lwjgl3Application app;
 
+    private Camera camera;
+
+    private ModelBatch modelBatch;
+
     public static boolean HasFocus;
 
     @Override
     public void dispose() {
-        if (chunk != null)
-            chunk.dispose();
         super.dispose();
         miniAudio.dispose();
         Logger.info("Game Disposed");
@@ -52,6 +56,7 @@ public class CircuitVerse extends ApplicationAdapter {
 
     @Override
     public void create() {
+        camera = new Camera();
         chunk = new Chunk();
         app = (Lwjgl3Application) Gdx.app;
 
@@ -59,16 +64,18 @@ public class CircuitVerse extends ApplicationAdapter {
         Gdx.graphics.setForegroundFPS(60);
         Gdx.input.setCursorCatched(true);
 
+        modelBatch = new ModelBatch();
         onInit();
     }
 
     @Override
     public void render() {
-        Gdx.gl.glClearColor(0, 0, 0, 11);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-        chunk.render();
-        super.render();
+        camera.update();
+
+        chunk.render(camera);
     }
 
     @Override
@@ -83,7 +90,6 @@ public class CircuitVerse extends ApplicationAdapter {
 
     @Override
     public void resize(int width, int height) {
-        chunk.resize(width, height);
         super.resize(width, height);
     }
 }

@@ -25,14 +25,21 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowListener;
 import mi.m4x.project.circuitverse.core.CircuitVerse;
+import mi.m4x.project.circuitverse.game.Camera;
+import mi.m4x.project.circuitverse.game.Chunk;
 import org.pmw.tinylog.Logger;
 
 public class Main {
+
+    private static Camera camera;
+    private static Chunk chunk;
 
     public static void main(String[] args) {
         try {
             // Initialize and start the application
             createApplication();
+            camera = new Camera();
+            chunk = new Chunk();
         } catch (Exception e) {
             // Handle any unexpected exceptions gracefully
             Logger.error("An error occurred during application initialization: {}", e.getMessage());

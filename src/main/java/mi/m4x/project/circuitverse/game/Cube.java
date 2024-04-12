@@ -19,29 +19,35 @@
 
 package mi.m4x.project.circuitverse.game;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 
 public class Cube {
-    private TextureRegion texture;
-    private SpriteBatch batch;
-    private Vector3 position;
+    private ModelInstance instance;
 
-    public Cube(TextureRegion texture, Vector3 position) {
-        this.texture = texture;
-        this.batch = new SpriteBatch();
-        this.position = position;
+    public Cube(Vector3 position) {
+        ModelBuilder modelBuilder = new ModelBuilder();
+        Model model = modelBuilder.createBox(1, 1, 1,
+                new Material(ColorAttribute.createDiffuse(Color.GREEN)),
+                VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
+        instance = new ModelInstance(model, position);
     }
 
-    public void render(Vector3 size) {
-        batch.begin();
-        batch.draw(texture, position.x * size.x, position.y * size.y, size.x, size.y);
-        batch.end();
+    public ModelInstance getInstance() {
+        return instance;
     }
 
     public void dispose() {
-        batch.dispose();
-        texture.getTexture().dispose();
+        instance.model.dispose();
+    }
+
+    public void resize(float scaleFactor) {
+        instance.transform.scl(scaleFactor);
     }
 }
