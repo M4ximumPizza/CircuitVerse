@@ -13,6 +13,19 @@ repositories {
 }
 
 dependencies {
+    // Logging
+    implementation("org.tinylog:tinylog:$tiny_logger_version")
+    implementation("com.github.tobiasrm:tinylog-coloredconsole:$tiny_logger_version")
+
+    // Gdx
+    implementation("com.badlogicgames.gdx:gdx-platform:$gdx_version")
+    implementation("com.badlogicgames.gdx:gdx-platform:$gdx_version:natives-desktop")
+    implementation("com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdx_version")
+    
+    // Audio
+    implementation("games.rednblack.miniaudio:miniaudio:$mini_audio_version")
+    implementation("games.rednblack.miniaudio:miniaudio:$mini_audio_version:natives-desktop")
+    
     // LWJGL dependencies
     implementation 'org.lwjgl:lwjgl:3.3.2'
     implementation 'org.lwjgl:lwjgl-opengl:3.3.2' // LWJGL OpenGL
@@ -39,15 +52,6 @@ repositories {
         url "https://jitpack.io"
     }
 
-    maven {
-        name "Fabric Mc"
-        url "https://maven.fabricmc.net/"
-    }
-
-    maven {
-        name "Sponge Powered"
-        url "https://repo.spongepowered.org/maven/"
-    }
 }
 
 configurations {
@@ -64,42 +68,6 @@ configurations {
     testCompileClasspath.extendsFrom(internal)
     testRuntimeClasspath.extendsFrom(internal)
 }
-
-dependencies {
-    // Logging
-    implementation("org.tinylog:tinylog:$tiny_logger_version")
-    implementation("com.github.tobiasrm:tinylog-coloredconsole:$tiny_logger_version")
-
-    // Gdx
-    implementation("com.badlogicgames.gdx:gdx-platform:$gdx_version")
-    implementation("com.badlogicgames.gdx:gdx-platform:$gdx_version:natives-desktop")
-
-    implementation("com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdx_version")
-
-    // Audio
-    implementation("games.rednblack.miniaudio:miniaudio:$mini_audio_version")
-    implementation("games.rednblack.miniaudio:miniaudio:$mini_audio_version:natives-desktop")
-
-    // Google
-    implementation("com.google.guava:guava:21.0")
-    implementation("com.google.code.gson:gson:2.8.7")
-
-    // Fabric Loader
-    implementation("net.fabricmc:fabric-loader:0.15.7")
-    implementation("net.fabricmc:access-widener:2.1.0")
-    implementation("net.fabricmc:tiny-mappings-parser:0.2.2.14")
-    shadow("net.fabricmc:sponge-mixin:0.12.5+mixin.0.8.5")
-    shadow("io.github.llamalad7:mixinextras-fabric:0.3.5")
-
-    // Asm
-    implementation("org.ow2.asm:asm:9.6")
-    implementation("org.ow2.asm:asm-util:9.6")
-    implementation("org.ow2.asm:asm-tree:9.6")
-    implementation("org.ow2.asm:asm-analysis:9.6")
-    implementation("org.ow2.asm:asm-commons:9.6")
-
-}
-
 
 tasks.shadowJar {
 //    mainClassName = "mi.m4x.project.circuitverse.main.Main"
