@@ -67,6 +67,7 @@ public class CircuitVerse extends ApplicationAdapter {
     public void render() {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        this.camera.update();
 
         this.doTicks();
 
@@ -83,7 +84,6 @@ public class CircuitVerse extends ApplicationAdapter {
 
         double curUpdateTime;
         for(curUpdateTime = (double)System.currentTimeMillis(); this.fixedUpdateAccumulator >= fixedUpdateTimestep; this.lastUpdateTime = curUpdateTime) {
-            this.camera.update();
             this.fixedUpdateAccumulator -= fixedUpdateTimestep;
         }
 
