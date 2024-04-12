@@ -71,6 +71,11 @@ public class CircuitVerse extends ApplicationAdapter {
 
         this.doTicks();
 
+        // Update the title with the current FPS
+        if (Gdx.app != null) {
+            Gdx.app.getGraphics().setTitle("Circuit Verse - 1.0.0 - FPS: " + Gdx.graphics.getFramesPerSecond());
+        }
+
         chunk.render(camera);
     }
 
