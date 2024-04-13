@@ -37,7 +37,6 @@ public class Main {
 
     private static String texturePath = "textures/icon.png";;
     private static int cubeCount = 10;
-
     public static void main(String[] args) {
         try {
             // Initialize and start the application

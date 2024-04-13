@@ -24,7 +24,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import games.rednblack.miniaudio.MiniAudio;
-import mi.m4x.project.circuitverse.game.Arrow;
 import mi.m4x.project.circuitverse.game.Camera;
 import mi.m4x.project.circuitverse.game.Chunk;
 import mi.m4x.project.circuitverse.game.Constants;
@@ -46,8 +45,6 @@ public class CircuitVerse extends ApplicationAdapter {
 
     public static boolean HasFocus;
 
-    private Arrow arrow;
-
 
     @Override
     public void create() {
@@ -55,16 +52,11 @@ public class CircuitVerse extends ApplicationAdapter {
         camera = new Camera();
         chunk = new Chunk(Constants.TEXTURE_FILE_PATH, cubeCount); // Create the Chunk here
         app = (Lwjgl3Application) Gdx.app;
-        arrow = new Arrow("models/HCA_037_ARROW_HEAD.obj", 0, 0, 0);
 
         // Set the camera's position to be above the highest point of the chunk
         camera.getCamera().position.set(cubeCount / 2f, cubeCount, cubeCount / 2f);
         camera.getCamera().lookAt(cubeCount / 2f, 0, cubeCount / 2f);
         camera.getCamera().update();
-
-        modelBatch.begin(camera.getCamera());
-        modelBatch.render(arrow.getInstance());
-        modelBatch.end();
 
         miniAudio = new MiniAudio();
         Gdx.graphics.setForegroundFPS(60);
