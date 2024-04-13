@@ -22,36 +22,30 @@ package mi.m4x.project.circuitverse.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.VertexAttributes;
-import com.badlogic.gdx.graphics.g3d.Material;
-import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Vector3;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Chunk {
-    private Model cubeModel;
-    private List<ModelInstance> cubeInstances;
+    private List<Cube> cubes;
     private ModelBatch modelBatch;
 
-    public Chunk() {
-        modelBatch = new ModelBatch();
-        cubeInstances = new ArrayList<>();
+    public Chunk(String texturePath, int cubeCount) {
+        this.modelBatch = new ModelBatch();
+        this.cubes = new ArrayList<>();
 
-        ModelBuilder modelBuilder = new ModelBuilder();
-        cubeModel = modelBuilder.createBox(1f, 1f, 1f,
-                new Material(ColorAttribute.createDiffuse(Color.GREEN)),
-                VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
+        int width = 16;
+        int height = 16;
+        int depth = 1;
 
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                ModelInstance cubeInstance = new ModelInstance(cubeModel);
-                cubeInstance.transform.translate(x, 0, z);
-                cubeInstances.add(cubeInstance);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                for (int z = 0; z < depth; z++) {
+                    this.cubes.add(new Cube(texturePath, x, y, z));
+                }
             }
         }
     }
@@ -61,14 +55,16 @@ public class Chunk {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         modelBatch.begin(camera.getCamera());
-        for (ModelInstance cubeInstance : cubeInstances) {
-            modelBatch.render(cubeInstance);
+        for (Cube cube : cubes) {
+                modelBatch.render(cube.getInstance());
         }
         modelBatch.end();
     }
 
     public void dispose() {
         modelBatch.dispose();
-        cubeModel.dispose();
+        for (Cube cube : cubes) {
+            cube.dispose();
+        }
     }
 }

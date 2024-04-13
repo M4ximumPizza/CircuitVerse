@@ -24,8 +24,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import games.rednblack.miniaudio.MiniAudio;
+import mi.m4x.project.circuitverse.game.Arrow;
 import mi.m4x.project.circuitverse.game.Camera;
 import mi.m4x.project.circuitverse.game.Chunk;
+import mi.m4x.project.circuitverse.game.Constants;
 import org.lwjgl.opengl.GL20;
 import org.pmw.tinylog.Logger;
 
@@ -40,7 +42,34 @@ public class CircuitVerse extends ApplicationAdapter {
 
     private ModelBatch modelBatch;
 
+    private int cubeCount = 10;
+
     public static boolean HasFocus;
+
+    private Arrow arrow;
+
+
+    @Override
+    public void create() {
+        modelBatch = new ModelBatch();
+        camera = new Camera();
+        chunk = new Chunk(Constants.TEXTURE_FILE_PATH, cubeCount); // Create the Chunk here
+        app = (Lwjgl3Application) Gdx.app;
+        arrow = new Arrow("models/HCA_037_ARROW_HEAD.obj", 0, 0, 0);
+
+        // Set the camera's position to be above the highest point of the chunk
+        camera.getCamera().position.set(cubeCount / 2f, cubeCount, cubeCount / 2f);
+        camera.getCamera().lookAt(cubeCount / 2f, 0, cubeCount / 2f);
+        camera.getCamera().update();
+
+        modelBatch.begin(camera.getCamera());
+        modelBatch.render(arrow.getInstance());
+        modelBatch.end();
+
+        miniAudio = new MiniAudio();
+        Gdx.graphics.setForegroundFPS(60);
+        Gdx.input.setCursorCatched(true);
+    }
 
     @Override
     public void dispose() {
@@ -51,32 +80,17 @@ public class CircuitVerse extends ApplicationAdapter {
     }
 
     @Override
-    public void create() {
-        camera = new Camera();
-        chunk = new Chunk();
-        app = (Lwjgl3Application) Gdx.app;
-
-        miniAudio = new MiniAudio();
-        Gdx.graphics.setForegroundFPS(60);
-        Gdx.input.setCursorCatched(true);
-
-        modelBatch = new ModelBatch();
-    }
-
-    @Override
     public void render() {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         this.camera.update();
-
-        this.doTicks();
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        chunk.render(camera);
+        modelBatch.render(arrow.getInstance());
 
         // Update the title with the current FPS
         if (Gdx.app != null) {
             Gdx.app.getGraphics().setTitle("Circuit Verse - 1.0.0 - FPS: " + Gdx.graphics.getFramesPerSecond());
         }
 
-        chunk.render(camera);
     }
 
     public float fixedUpdateAccumulator = 0f;

@@ -42,28 +42,30 @@ public class Camera {
     }
 
     public void update() {
-        currentMouseX = Gdx.input.getX();
-        currentMouseY = Gdx.input.getY();
+        if (Gdx.input.isCursorCatched()) { // Check if the cursor is captured
+            currentMouseX = Gdx.input.getX();
+            currentMouseY = Gdx.input.getY();
 
-        float dx = (float) (currentMouseX - oldMouseX);
-        float dy = (float) (currentMouseY - oldMouseY);
+            float dx = (float) (currentMouseX - oldMouseX);
+            float dy = (float) (currentMouseY - oldMouseY);
 
-        rotation.y += dx * mouseSensitivity; // horizontal rotation
-        rotation.x += dy * mouseSensitivity; // vertical rotation
-        rotation.x = Math.max(-90, Math.min(90, rotation.x)); // limit vertical rotation
+            rotation.y += dx * mouseSensitivity; // horizontal rotation
+            rotation.x += dy * mouseSensitivity; // vertical rotation
+            rotation.x = Math.max(-90, Math.min(90, rotation.x)); // limit vertical rotation
 
-        oldMouseX = currentMouseX;
-        oldMouseY = currentMouseY;
+            oldMouseX = currentMouseX;
+            oldMouseY = currentMouseY;
+        }
 
         float x = (float) Math.sin(Math.toRadians(rotation.y)) * moveSpeed;
         float z = (float) Math.cos(Math.toRadians(rotation.y)) * moveSpeed;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) position.add(-x, 0, z);
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) position.add(x, 0, -z);
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) position.add(-z, 0, -x);
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) position.add(z, 0, x);
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) position.add(0, moveSpeed, 0);
-        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) position.add(0, -moveSpeed, 0);
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) position.add(z, 0, x); // Move left
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) position.add(-z, 0, -x); // Move right
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) position.add(-x, 0, z); // Move forward
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) position.add(x, 0, -z); // Move backward
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) position.add(0, moveSpeed, 0); // Move up
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) position.add(0, -moveSpeed, 0); // Move down
 
         camera.position.set(position);
         camera.direction.set(new Vector3((float) Math.sin(-Math.toRadians(rotation.y)), (float) Math.tan(-Math.toRadians(rotation.x)), (float) Math.cos(-Math.toRadians(rotation.y))));

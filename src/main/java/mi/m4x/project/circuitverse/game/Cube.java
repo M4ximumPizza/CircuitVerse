@@ -19,29 +19,63 @@
 
 package mi.m4x.project.circuitverse.game;
 
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class Cube {
     private ModelInstance instance;
+    private boolean isTextureLoaded;
+    private List<Block> blocks;
+    private Texture texture;
 
-    public Cube(Vector3 position) {
+    public Cube(String textureFilePath, float x, float y, float z) {
+        this.blocks = new ArrayList<>();
+        for (int i = 0; i < 6; i++) { // A cube has 6 faces
+            this.blocks.add(new Block(textureFilePath));
+        }
+
+        // Create a ModelBuilder to build the Model
         ModelBuilder modelBuilder = new ModelBuilder();
-        Model model = modelBuilder.createBox(1, 1, 1,
-                new Material(ColorAttribute.createDiffuse(Color.GREEN)),
-                VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
-        instance = new ModelInstance(model, position);
+
+        // Create a Material to apply the texture
+        Material material = new Material(TextureAttribute.createDiffuse(new Texture(textureFilePath)));
+
+        // Create the Model
+        Model model = modelBuilder.createBox(1f, 1f, 1f, material, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
+
+        System.out.println("Texture file path: " + textureFilePath);
+        System.out.println("Material: " + material);
+        System.out.println("Model: " + model);
+
+        // Create the ModelInstance
+        this.instance = new ModelInstance(model);
+        this.instance.transform.setToTranslation(x,y,z);
+    }
+
+    public List<Block> getBlocks() {
+        return this.blocks;
     }
 
     public ModelInstance getInstance() {
         return instance;
     }
+
+    public boolean isTextureLoaded() {
+        return isTextureLoaded;
+    }
+
 
     public void dispose() {
         instance.model.dispose();
