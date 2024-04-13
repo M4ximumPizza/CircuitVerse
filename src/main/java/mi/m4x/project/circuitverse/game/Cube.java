@@ -39,9 +39,14 @@ public class Cube {
     private boolean isTextureLoaded;
     private List<Block> blocks;
     private Texture texture;
+    private Coordinate coordinate;
+    private int x;
+    private int y;
+    private int z;
 
     public Cube(String textureFilePath, float x, float y, float z) {
         this.blocks = new ArrayList<>();
+        this.coordinate = new Coordinate((int)x, (int)y, (int)z);
         for (int i = 0; i < 6; i++) { // A cube has 6 faces
             this.blocks.add(new Block(textureFilePath));
         }
@@ -62,6 +67,18 @@ public class Cube {
         // Create the ModelInstance
         this.instance = new ModelInstance(model);
         this.instance.transform.setToTranslation(x,y,z);
+    }
+
+    public Coordinate getCoordinate() {
+        return this.coordinate;
+    }
+
+    public void updateCoordinates(int x, int y, int z) {
+        this.coordinate = new Coordinate(x, y, z);
+        logPostion();
+    }
+    public void logPostion() {
+        System.out.println("Cube postion: " + coordinate);
     }
 
     public List<Block> getBlocks() {

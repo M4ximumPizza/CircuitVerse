@@ -27,6 +27,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowListener;
 import mi.m4x.project.circuitverse.core.CircuitVerse;
 import mi.m4x.project.circuitverse.game.Camera;
 import mi.m4x.project.circuitverse.game.Chunk;
+import mi.m4x.project.circuitverse.game.Coordinate;
 import mi.m4x.project.circuitverse.graphic.Texture;
 import org.pmw.tinylog.Logger;
 
@@ -41,7 +42,8 @@ public class Main {
         try {
             // Initialize and start the application
             createApplication();
-            chunk = new Chunk(texturePath, cubeCount);
+            Coordinate spawnPoint = new Coordinate(0, 0);
+            chunk = new Chunk(texturePath, cubeCount, spawnPoint);
             camera = new Camera();
         } catch (Exception e) {
             // Handle any unexpected exceptions gracefully

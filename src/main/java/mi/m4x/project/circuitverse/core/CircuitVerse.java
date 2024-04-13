@@ -27,6 +27,7 @@ import games.rednblack.miniaudio.MiniAudio;
 import mi.m4x.project.circuitverse.game.Camera;
 import mi.m4x.project.circuitverse.game.Chunk;
 import mi.m4x.project.circuitverse.game.Constants;
+import mi.m4x.project.circuitverse.game.Coordinate;
 import org.lwjgl.opengl.GL20;
 import org.pmw.tinylog.Logger;
 
@@ -50,7 +51,8 @@ public class CircuitVerse extends ApplicationAdapter {
     public void create() {
         modelBatch = new ModelBatch();
         camera = new Camera();
-        chunk = new Chunk(Constants.TEXTURE_FILE_PATH, cubeCount); // Create the Chunk here
+        Coordinate spawnPoint = new Coordinate(0, 0);
+        chunk = new Chunk(Constants.TEXTURE_FILE_PATH, cubeCount, spawnPoint);
         app = (Lwjgl3Application) Gdx.app;
 
         // Set the camera's position to be above the highest point of the chunk
@@ -76,7 +78,6 @@ public class CircuitVerse extends ApplicationAdapter {
         this.camera.update();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         chunk.render(camera);
-        modelBatch.render(arrow.getInstance());
 
         // Update the title with the current FPS
         if (Gdx.app != null) {

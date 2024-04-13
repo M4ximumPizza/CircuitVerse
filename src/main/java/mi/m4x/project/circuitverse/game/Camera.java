@@ -22,17 +22,21 @@ package mi.m4x.project.circuitverse.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import mi.m4x.project.circuitverse.graphic.Matrix4f;
 
 public class Camera {
     private PerspectiveCamera camera;
-    private Vector3 position, rotation;
+    private Vector3 position, rotation, previousPostion;
     private float moveSpeed = 0.05f, mouseSensitivity = 0.15f;
     private double oldMouseX = 0, oldMouseY = 0, currentMouseX, currentMouseY;
+    private Matrix4 rotationMatrix;
 
     public Camera() {
         camera = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        position = new Vector3(8f, 10f, 8f);
+        position = new Vector3();
+        this.previousPostion = new Vector3();
         rotation = new Vector3();
         camera.position.set(position);
         camera.lookAt(0,0,0);
@@ -57,18 +61,32 @@ public class Camera {
             oldMouseY = currentMouseY;
         }
 
-        float x = (float) Math.sin(Math.toRadians(rotation.y)) * moveSpeed;
-        float z = (float) Math.cos(Math.toRadians(rotation.y)) * moveSpeed;
+        Matrix4 rotationMatrix = new Matrix4();
+        rotationMatrix.rotate(1, 0, 0, rotation.x);
+        rotationMatrix.rotate(0, 1, 0, rotation.y);
+        rotationMatrix.rotate(0, 0, 1, rotation.z);
 
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) position.add(z, 0, x); // Move left
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) position.add(-z, 0, -x); // Move right
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) position.add(-x, 0, z); // Move forward
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) position.add(x, 0, -z); // Move backward
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) position.add(0, moveSpeed, 0); // Move up
-        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) position.add(0, -moveSpeed, 0); // Move down
+        Vector3 direction = new Vector3(0, 0, -moveSpeed);
+        direction.mul(rotationMatrix);
+
+        Vector3 sideward = new Vector3(moveSpeed, 0, 0);
+        sideward.mul(rotationMatrix);
+
+        Vector3 upward = new Vector3(0, -moveSpeed, 0);
+        upward.mul(rotationMatrix);
+
+        Vector3 downward = new Vector3(0, moveSpeed, 0);
+        downward.mul(rotationMatrix);
+
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) position.add(sideward); // Move left
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) position.sub(sideward); // Move right
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) position.add(direction); // Move forward
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) position.sub(direction); // Move backward
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) position.add(upward); // Move up
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) position.add(downward); // Move down
 
         camera.position.set(position);
-        camera.direction.set(new Vector3((float) Math.sin(-Math.toRadians(rotation.y)), (float) Math.tan(-Math.toRadians(rotation.x)), (float) Math.cos(-Math.toRadians(rotation.y))));
+        camera.direction.set(direction);
         camera.update();
     }
 

@@ -32,19 +32,24 @@ import java.util.List;
 public class Chunk {
     private List<Cube> cubes;
     private ModelBatch modelBatch;
+    private Coordinate spawnPoint;
 
-    public Chunk(String texturePath, int cubeCount) {
+    public Chunk(String texturePath, int cubeCount, Coordinate spawnPoint) {
         this.modelBatch = new ModelBatch();
         this.cubes = new ArrayList<>();
+        this.spawnPoint = spawnPoint;
 
         int width = 16;
         int height = 16;
         int depth = 1;
 
+        int halfWidth = width / 2;
+        int halfHeight = height / 2;
+
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 for (int z = 0; z < depth; z++) {
-                    this.cubes.add(new Cube(texturePath, x, y, z));
+                    this.cubes.add(new Cube(texturePath, x - halfWidth, y - halfHeight, z));
                 }
             }
         }
@@ -56,7 +61,7 @@ public class Chunk {
 
         modelBatch.begin(camera.getCamera());
         for (Cube cube : cubes) {
-                modelBatch.render(cube.getInstance());
+            modelBatch.render(cube.getInstance());
         }
         modelBatch.end();
     }
